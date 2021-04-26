@@ -1,67 +1,47 @@
-# Quarkus Pub/Sub Sample Application with GraalVM
+# example-gcp-graal2 project
 
-The Quarkus Pub/Sub sample application demonstrates some common operations with Google Cloud Pub/Sub and is compatible with GraalVM compilation.
+This project is an example for Qurkus + GCP Library + GraalVM native-image.
+Thank you for greate libary, GoogleCloudPlatform team.
+https://github.com/GoogleCloudPlatform/google-cloud-graalvm-support
 
-This application is built using the [Quarkus Framework](https://quarkus.io/).
+ref:
+- [Quarkus + GraalVM (native-image)でGCP系ライブラリを利用する](https://zenn.dev/koduki/articles/7d02c433121fb3)
 
-The application will show a simple user interface that lets you create and delete Cloud Pub/Sub resources, read messages from topics, and publish messages to topics.
+## Build Builder
 
-![screenshot of the application](app_screenshot.png)
-
-## Setup Instructions
-
-1. Follow the [GCP Project and GraalVM Setup Instructions](../../README.md).
-You may skip the GraalVM installation step if you would like to build the executable in a container.
-
-2. [Enable the Pub/Sub APIs](https://console.cloud.google.com/apis/api/pubsub.googleapis.com).
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-
-```
-mvn quarkus:dev
+```bash
+$ cd builder
+$ gcloud builds submit 
 ```
 
-Then visit http://localhost:8080/ to view the application.
+## Build on Local
 
-## Creating a native executable
 
-### Compiling using local GraalVM installation
+### JVM
 
-You can create a native executable using the `graal` profile.
-
-```
-mvn package -P graal`
+```bash
+$ GOOGLE_APPLICATION_CREDENTIALS=~/.seacret/key.json ./target/example-gcp-graal2-1.0.0-SNAPSHOT-runner
 ```
 
-### Compiling using Docker container
+### native-image
 
-If you don't have GraalVM installed, you can run the native executable build in a container using the following command.
-
-```
-mvn package -P graal -Dquarkus.native.container-build=true -Dnative-image.xmx=6g
-```
-
-This method requires Docker Engine to be installed and configured to have at least 6 GB of memory.
-Look for Docker -> Preferences -> Resources -> Advanced to set the memory limit.
-You may use this method on any machine that supports Docker, but it will produce an executable that will only run on Linux.
-
-### Running the executable on Linux
-
-You can then execute your native executable with: `./target/quarkus-pubsub-sample-0.5.0-SNAPSHOT-runner`
-
-Then visit http://localhost:8080/ to view the application.
-
-### Running the executable on non-Linux (MacOS / Windows) using Docker
-
-You will need to [create](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#iam-service-account-keys-create-console) a service account key if you don't have one.
-Then you will be able to run the executable in a Linux container.
-
-```
-$ export CREDS_PATH=/PATH/TO/CREDS/DIRECTORY/
-$ export CREDS_FILE_NAME=credentials-file.json
-$ docker run -it --rm -v $PWD/target/:/target/ -v $CREDS_PATH:/creds/ --env GOOGLE_APPLICATION_CREDENTIALS=/creds/$CREDS_FILE_NAME -p 8080:8080 ubuntu ./target/quarkus-pubsub-sample-0.5.0-SNAPSHOT-runner
+```bash
+$ mvn clean package -P native
+#or
+$ ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+## Build & Deploy
+
+```bash
+$ gclo
+```
+
+## Connectivity Test
+
+```
+$ curl http://localhost:8080/hello/say
+Project: xxx, key: 5760334488928256                                             
+$ curl http://localhost:8080/hello/listen
+title: test - Wed Apr 28 00:49:50 PDT 2021, count: 11
+```
