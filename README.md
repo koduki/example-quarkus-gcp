@@ -1,8 +1,7 @@
 # example-gcp-graal2 project
 
 This project is an example for Qurkus + GCP Library + GraalVM native-image.
-Thank you for greate libary, GoogleCloudPlatform team.
-https://github.com/GoogleCloudPlatform/google-cloud-graalvm-support
+Thank you for greate [google-cloud-graalvm-support](https://github.com/GoogleCloudPlatform/google-cloud-graalvm-support), GoogleCloudPlatform team.
 
 ref:
 - [Quarkus + GraalVM (native-image)でGCP系ライブラリを利用する](https://zenn.dev/koduki/articles/7d02c433121fb3)
@@ -34,7 +33,7 @@ $ ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ## Build & Deploy
 
 ```bash
-$ gclo
+$ gcloud builds submit --substitutions=_SRV_ACC=$SRV_ACC
 ```
 
 ## Connectivity Test
